@@ -1,4 +1,6 @@
-﻿namespace HRMS.CORE;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HRMS.CORE;
 
 public class Gender
 {

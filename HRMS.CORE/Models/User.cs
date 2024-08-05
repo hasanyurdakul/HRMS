@@ -6,9 +6,11 @@ namespace HRMS.CORE;
 
 public class User : IdentityUser<int>
 {
-    [Key, ForeignKey("Employee")]
+    [ForeignKey("Employee")]
     public int EmployeeId { get; set; }
+    [ForeignKey("Company")]
     public int CompanyId { get; set; }
+    [NotMapped]
     public int EventId { get; set; }
 
     // Navigation properties

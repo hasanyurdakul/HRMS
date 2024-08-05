@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HRMS.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration2 : Migration
+    public partial class Test1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,11 +60,27 @@ namespace HRMS.DAL.Migrations
                 {
                     LeaveTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LeaveTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LeaveTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LeaveId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LeaveTypes", x => x.LeaveTypeId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NationalHolidays",
+                columns: table => new
+                {
+                    NationalHolidayId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NationalHolidayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NationalHolidayStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NationalHolidayEndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NationalHolidays", x => x.NationalHolidayId);
                 });
 
             migrationBuilder.CreateTable(
@@ -74,7 +90,8 @@ namespace HRMS.DAL.Migrations
                     RequestStatusId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RequestStatusName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExpenseId = table.Column<int>(type: "int", nullable: false)
+                    ExpenseId = table.Column<int>(type: "int", nullable: true),
+                    LeaveId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,8 +130,8 @@ namespace HRMS.DAL.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                    CompanyId = table.Column<int>(type: "int", nullable: true),
+                    EmployeeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,12 +147,14 @@ namespace HRMS.DAL.Migrations
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyLogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: false),
                     ResumeId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    JobId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -152,15 +171,15 @@ namespace HRMS.DAL.Migrations
                 name: "Departments",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                    DepartmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
                     DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.EmployeeId);
+                    table.PrimaryKey("PK_Departments", x => x.DepartmentId);
                     table.ForeignKey(
                         name: "FK_Departments_Companies_CompanyId",
                         column: x => x.CompanyId,
@@ -187,65 +206,66 @@ namespace HRMS.DAL.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RemainingLeaveDays = table.Column<int>(type: "int", nullable: false),
+                    AddressId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     EducationId = table.Column<int>(type: "int", nullable: false),
                     GenderId = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     JobId = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    ManagerId = table.Column<int>(type: "int", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false),
+                    ManagerId = table.Column<int>(type: "int", nullable: true),
                     SalaryId = table.Column<int>(type: "int", nullable: false),
                     isActive = table.Column<bool>(type: "bit", nullable: false),
                     ResumeId = table.Column<int>(type: "int", nullable: false),
                     ExpenseId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LeaveId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeId);
                     table.ForeignKey(
-                        name: "FK_Employees_Companies_CompanyId",
-                        column: x => x.CompanyId,
+                        name: "FK_Employees_Companies_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Employees_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Employees_Educations_EducationId",
-                        column: x => x.EducationId,
+                        name: "FK_Employees_Departments_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Employees_Educations_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Educations",
                         principalColumn: "EducationId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Employees_Genders_GenderId",
-                        column: x => x.GenderId,
+                        name: "FK_Employees_Genders_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Genders",
                         principalColumn: "GenderId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Employees_Jobs_JobId",
-                        column: x => x.JobId,
+                        name: "FK_Employees_Jobs_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Jobs",
                         principalColumn: "JobId",
                         onDelete: ReferentialAction.Restrict);
@@ -255,11 +275,9 @@ namespace HRMS.DAL.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -279,14 +297,14 @@ namespace HRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Companies_CompanyId",
-                        column: x => x.CompanyId,
+                        name: "FK_AspNetUsers_Companies_Id",
+                        column: x => x.Id,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
+                        name: "FK_AspNetUsers_Employees_Id",
+                        column: x => x.Id,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Restrict);
@@ -296,8 +314,7 @@ namespace HRMS.DAL.Migrations
                 name: "Expenses",
                 columns: table => new
                 {
-                    ExpenseId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExpenseId = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
                     ExpenseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -310,25 +327,24 @@ namespace HRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Expenses", x => x.ExpenseId);
                     table.ForeignKey(
-                        name: "FK_Expenses_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
+                        name: "FK_Expenses_Employees_ExpenseId",
+                        column: x => x.ExpenseId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Expenses_RequestStatuses_RequestStatusId",
-                        column: x => x.RequestStatusId,
+                        name: "FK_Expenses_RequestStatuses_ExpenseId",
+                        column: x => x.ExpenseId,
                         principalTable: "RequestStatuses",
                         principalColumn: "RequestStatusId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Leaves",
                 columns: table => new
                 {
-                    LeaveId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LeaveId = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     LeaveTypeId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -341,43 +357,44 @@ namespace HRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Leaves", x => x.LeaveId);
                     table.ForeignKey(
-                        name: "FK_Leaves_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
+                        name: "FK_Leaves_Employees_LeaveId",
+                        column: x => x.LeaveId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Leaves_LeaveTypes_LeaveTypeId",
-                        column: x => x.LeaveTypeId,
+                        name: "FK_Leaves_LeaveTypes_LeaveId",
+                        column: x => x.LeaveId,
                         principalTable: "LeaveTypes",
                         principalColumn: "LeaveTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Leaves_RequestStatuses_RequestStatusId",
-                        column: x => x.RequestStatusId,
+                        name: "FK_Leaves_RequestStatuses_LeaveId",
+                        column: x => x.LeaveId,
                         principalTable: "RequestStatuses",
                         principalColumn: "RequestStatusId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Resumes",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    ResumeId = table.Column<int>(type: "int", nullable: false),
+                    ResumeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ResumePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Resumes", x => x.EmployeeId);
+                    table.PrimaryKey("PK_Resumes", x => x.ResumeId);
                     table.ForeignKey(
                         name: "FK_Resumes_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Resumes_Employees_EmployeeId",
                         column: x => x.EmployeeId,
@@ -390,19 +407,20 @@ namespace HRMS.DAL.Migrations
                 name: "Salaries",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    SalaryId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<int>(type: "int", nullable: false)
+                    SalaryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Salaries", x => x.EmployeeId);
+                    table.PrimaryKey("PK_Salaries", x => x.SalaryId);
                     table.ForeignKey(
                         name: "FK_Salaries_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -494,8 +512,7 @@ namespace HRMS.DAL.Migrations
                 name: "Events",
                 columns: table => new
                 {
-                    EventId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EventId = table.Column<int>(type: "int", nullable: false),
                     EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EventDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EventStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -507,14 +524,14 @@ namespace HRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Events", x => x.EventId);
                     table.ForeignKey(
-                        name: "FK_Events_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Events_AspNetUsers_EventId",
+                        column: x => x.EventId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Events_Companies_CompanyId",
-                        column: x => x.CompanyId,
+                        name: "FK_Events_Companies_EventId",
+                        column: x => x.EventId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
                         onDelete: ReferentialAction.Restrict);
@@ -524,7 +541,8 @@ namespace HRMS.DAL.Migrations
                 name: "IX_Addresses_EmployeeId",
                 table: "Addresses",
                 column: "EmployeeId",
-                unique: true);
+                unique: true,
+                filter: "[EmployeeId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -559,17 +577,6 @@ namespace HRMS.DAL.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CompanyId",
-                table: "AspNetUsers",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_EmployeeId",
-                table: "AspNetUsers",
-                column: "EmployeeId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -588,74 +595,26 @@ namespace HRMS.DAL.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_CompanyId",
-                table: "Employees",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_DepartmentId",
-                table: "Employees",
-                column: "DepartmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_EducationId",
-                table: "Employees",
-                column: "EducationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_GenderId",
-                table: "Employees",
-                column: "GenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_JobId",
-                table: "Employees",
-                column: "JobId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_CompanyId",
-                table: "Events",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_UserId",
-                table: "Events",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Expenses_EmployeeId",
-                table: "Expenses",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Expenses_RequestStatusId",
-                table: "Expenses",
-                column: "RequestStatusId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_CompanyId",
                 table: "Jobs",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Leaves_EmployeeId",
-                table: "Leaves",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Leaves_LeaveTypeId",
-                table: "Leaves",
-                column: "LeaveTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Leaves_RequestStatusId",
-                table: "Leaves",
-                column: "RequestStatusId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Resumes_CompanyId",
                 table: "Resumes",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resumes_EmployeeId",
+                table: "Resumes",
+                column: "EmployeeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Salaries_EmployeeId",
+                table: "Salaries",
+                column: "EmployeeId",
+                unique: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Addresses_Employees_EmployeeId",
@@ -696,6 +655,9 @@ namespace HRMS.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Leaves");
+
+            migrationBuilder.DropTable(
+                name: "NationalHolidays");
 
             migrationBuilder.DropTable(
                 name: "Resumes");

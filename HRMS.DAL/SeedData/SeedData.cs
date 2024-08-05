@@ -12,34 +12,30 @@ public static class SeedData
             return;   // Already seeded
         }
 
-        //############################################################################################################
-        // Seed data for Genders
+        // + Seed data for Genders
         context.Genders.AddRange(
             new Gender { GenderName = "Male" },
             new Gender { GenderName = "Female" }
         );
         context.SaveChanges();
-        //############################################################################################################
-        //############################################################################################################
-        // Seed data for Leave Types
+
+        // + Seed data for Leave Types
         context.LeaveTypes.AddRange(
             new LeaveType { LeaveTypeName = "Sick Leave" },
             new LeaveType { LeaveTypeName = "Vacation Leave" },
             new LeaveType { LeaveTypeName = "Personal Leave" }
         );
         context.SaveChanges();
-        //############################################################################################################
-        //############################################################################################################
-        // Seed data for Request Statuses
+
+        // + Seed data for Request Statuses
         context.RequestStatuses.AddRange(
             new RequestStatus { RequestStatusName = "Pending" },
             new RequestStatus { RequestStatusName = "Approved" },
             new RequestStatus { RequestStatusName = "Rejected" }
         );
         context.SaveChanges();
-        //############################################################################################################
-        //############################################################################################################
-        // Seed data for Education 
+
+        // + Seed data for Education 
         context.Educations.AddRange(
             new Education { EducationLevel = "High School" },
             new Education { EducationLevel = "Bachelor's Degree" },
@@ -47,32 +43,9 @@ public static class SeedData
             new Education { EducationLevel = "Doctorate" }
         );
         context.SaveChanges();
-        //############################################################################################################
 
 
-        // // Seed data for Addresses
-        // context.Addresses.AddRange(
-        //     new Address
-        //     {
-        //         StreetAddress = "123 Main St",
-        //         City = "Anytown",
-        //         State = "NY",
-        //         PostalCode = "12345",
-        //         Country = "USA"
-        //     },
-        //     new Address
-        //     {
-        //         StreetAddress = "Birlik Mahallesi",
-        //         City = "İstanbul",
-        //         State = "Esenler",
-        //         PostalCode = "34230",
-        //         Country = "TR"
-        //     }
-        // );
-        // context.SaveChanges();
-
-
-        // Seed data for Companies
+        // + Seed data for Companies
         context.Companies.AddRange(
             new Company
             {
@@ -92,34 +65,6 @@ public static class SeedData
             }
         );
         context.SaveChanges();
-
-        // Seed data for Resumes
-        context.Resumes.AddRange(
-            new Resume { ResumePath = "https://via.placeholder.com/150", CompanyId = 1 }
-        );
-        context.SaveChanges();
-
-        // Seed data for Jobs
-        context.Jobs.AddRange(
-            new Job { JobTitle = "Human Resources Manager", CompanyId = 1 },
-            new Job { JobTitle = "Marketing Specialist", CompanyId = 1 }
-        );
-        context.SaveChanges();
-
-        // Seed data for Departments
-        context.Departments.AddRange(
-            new Department { DepartmentName = "Human Resources", CompanyId = 1 },
-            new Department { DepartmentName = "Marketing", CompanyId = 1 }
-        );
-        context.SaveChanges();
-
-        // Seed data for Salaries
-        context.Salaries.AddRange(
-            new Salary { Amount = 50000, EmployeeId = 1 }
-        );
-        context.SaveChanges();
-
-
 
         // Seed data for Employees
         context.Employees.AddRange(
@@ -149,73 +94,33 @@ public static class SeedData
                     State = "NY",
                     PostalCode = "12345",
                     Country = "USA"
+                },
+                Resume = new Resume
+                {
+                    ResumePath = "https://via.placeholder.com/150",
+                    CompanyId = 1,
+                    EmployeeId = 1
+                },
+                Job = new Job
+                {
+                    JobTitle = "Human Resources Manager",
+                    CompanyId = 1,
+                    EmployeeId = 1
+                },
+                Department = new Department
+                {
+                    DepartmentName = "Human Resources",
+                    CompanyId = 1,
+                    EmployeeId = 1
+                },
+                Salary = new Salary
+                {
+                    Amount = 50000,
+                    EmployeeId = 1
                 }
             });
         context.SaveChanges();
 
-        // // Seed data for Companies
-        // context.Companies.AddRange(
-        //     new Company
-        //     {
-        //         CompanyName = "Sample Company 1",
-        //         CompanyEmail = "info@samplecompany1.com",
-        //         CompanyPhoneNumber = "+1 (555) 555-1212",
-        //         CompanyLogoUrl = "https://via.placeholder.com/150",
 
-        //     },
-        //     new Company
-        //     {
-        //         CompanyName = "Sample Company 2",
-        //         CompanyEmail = "info@samplecompany2.com",
-        //         CompanyPhoneNumber = "+1 (555) 555-2323",
-        //         CompanyLogoUrl = "https://via.placeholder.com/150"
-        //     }
-        // );
-        // context.SaveChanges();
-
-        // // Seed data for Departments (assuming companies are already created)
-        // var company1 = context.Companies.FirstOrDefault(c => c.CompanyName == "Sample Company 1");
-        // var company2 = context.Companies.FirstOrDefault(c => c.CompanyName == "Sample Company 2");
-        // context.SaveChanges();
-
-        // context.Departments.AddRange(
-        //     new Department { DepartmentName = "Human Resources", Company = company1 },
-        //     new Department { DepartmentName = "Marketing", Company = company1 },
-        //     new Department { DepartmentName = "Engineering", Company = company2 },
-        //     new Department { DepartmentName = "Sales", Company = company2 }
-        // );
-        // context.SaveChanges();
-
-        // // Sample employees (assuming departments and genders are already created)
-        // context.Employees.AddRange(
-        //     new Employee
-        //     {
-        //         FirstName = "John",
-        //         LastName = "Doe",
-        //         Email = "john.doe@samplecompany1.com",
-        //         HireDate = DateTime.Now.AddYears(-2),
-        //         BirthDate = DateTime.Now.AddYears(-30),
-        //         PhoneNumber = "+1 (555) 555-4545",
-        //         GenderId = context.Genders.FirstOrDefault(g => g.GenderName == "Male").GenderId,
-        //         CompanyId = company1.CompanyId,
-        //         DepartmentId = context.Departments.FirstOrDefault(d => d.DepartmentName == "Human Resources").DepartmentId,
-        //         isActive = true
-        //     },
-        //     new Employee
-        //     {
-        //         FirstName = "Jane",
-        //         LastName = "Smith",
-        //         Email = "jane.smith@samplecompany2.com",
-        //         HireDate = DateTime.Now.AddYears(-1),
-        //         BirthDate = DateTime.Now.AddYears(-25),
-        //         PhoneNumber = "+1 (555) 555-5656",
-        //         GenderId = context.Genders.FirstOrDefault(g => g.GenderName == "Female").GenderId,
-        //         CompanyId = company2.CompanyId,
-        //         DepartmentId = context.Departments.FirstOrDefault(d => d.DepartmentName == "Marketing").DepartmentId,
-        //         isActive = true
-        //     }
-        // );
-
-        // context.SaveChanges();
     }
 }

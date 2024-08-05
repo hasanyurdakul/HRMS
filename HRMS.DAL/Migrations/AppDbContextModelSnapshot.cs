@@ -101,6 +101,9 @@ namespace HRMS.DAL.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ResumeId")
                         .HasColumnType("int");
 
@@ -117,23 +120,23 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Department", b =>
                 {
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("DepartmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"));
 
                     b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("DepartmentName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("EmployeeId");
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DepartmentId");
 
                     b.HasIndex("CompanyId");
 
@@ -163,10 +166,7 @@ namespace HRMS.DAL.Migrations
             modelBuilder.Entity("HRMS.CORE.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
@@ -210,7 +210,10 @@ namespace HRMS.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ManagerId")
+                    b.Property<int>("LeaveId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -234,26 +237,13 @@ namespace HRMS.DAL.Migrations
 
                     b.HasKey("EmployeeId");
 
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("EducationId");
-
-                    b.HasIndex("GenderId");
-
-                    b.HasIndex("JobId");
-
                     b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Event", b =>
                 {
                     b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -277,20 +267,13 @@ namespace HRMS.DAL.Migrations
 
                     b.HasKey("EventId");
 
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("UserId");
-
                     b.ToTable("Events");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Expense", b =>
                 {
                     b.Property<int>("ExpenseId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpenseId"));
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -315,10 +298,6 @@ namespace HRMS.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("ExpenseId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("RequestStatusId");
 
                     b.ToTable("Expenses");
                 });
@@ -371,10 +350,7 @@ namespace HRMS.DAL.Migrations
             modelBuilder.Entity("HRMS.CORE.Leave", b =>
                 {
                     b.Property<int>("LeaveId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeaveId"));
 
                     b.Property<int>("ApprovedById")
                         .HasColumnType("int");
@@ -399,12 +375,6 @@ namespace HRMS.DAL.Migrations
 
                     b.HasKey("LeaveId");
 
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("LeaveTypeId");
-
-                    b.HasIndex("RequestStatusId");
-
                     b.ToTable("Leaves");
                 });
 
@@ -415,6 +385,9 @@ namespace HRMS.DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeaveTypeId"));
+
+                    b.Property<int>("LeaveId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LeaveTypeName")
                         .IsRequired()
@@ -456,7 +429,10 @@ namespace HRMS.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestStatusId"));
 
-                    b.Property<int>("ExpenseId")
+                    b.Property<int?>("ExpenseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LeaveId")
                         .HasColumnType("int");
 
                     b.Property<string>("RequestStatusName")
@@ -470,22 +446,28 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Resume", b =>
                 {
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("ResumeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResumeId"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ResumeId")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<string>("ResumePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("EmployeeId");
+                    b.HasKey("ResumeId");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
 
                     b.ToTable("Resumes");
                 });
@@ -522,16 +504,22 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Salary", b =>
                 {
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("SalaryId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalaryId"));
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int>("SalaryId")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.HasKey("EmployeeId");
+                    b.HasKey("SalaryId");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
 
                     b.ToTable("Salaries");
                 });
@@ -539,10 +527,7 @@ namespace HRMS.DAL.Migrations
             modelBuilder.Entity("HRMS.CORE.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -562,9 +547,6 @@ namespace HRMS.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventId")
                         .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
@@ -601,11 +583,6 @@ namespace HRMS.DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -757,31 +734,31 @@ namespace HRMS.DAL.Migrations
                 {
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Employees")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Department", "Department")
                         .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Education", "Education")
                         .WithMany("Employees")
-                        .HasForeignKey("EducationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Gender", "Gender")
                         .WithMany("Employees")
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Job", "Job")
                         .WithMany("Employees")
-                        .HasForeignKey("JobId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -800,14 +777,14 @@ namespace HRMS.DAL.Migrations
                 {
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Events")
-                        .HasForeignKey("CompanyId")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.User", "User")
                         .WithMany("Events")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -819,14 +796,14 @@ namespace HRMS.DAL.Migrations
                 {
                     b.HasOne("HRMS.CORE.Employee", "Employee")
                         .WithMany("Expenses")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.RequestStatus", "RequestStatus")
                         .WithMany("Expenses")
-                        .HasForeignKey("RequestStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -837,9 +814,9 @@ namespace HRMS.DAL.Migrations
             modelBuilder.Entity("HRMS.CORE.Job", b =>
                 {
                     b.HasOne("HRMS.CORE.Company", "Company")
-                        .WithMany()
+                        .WithMany("Jobs")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -848,21 +825,21 @@ namespace HRMS.DAL.Migrations
             modelBuilder.Entity("HRMS.CORE.Leave", b =>
                 {
                     b.HasOne("HRMS.CORE.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Leaves")
+                        .HasForeignKey("LeaveId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.LeaveType", "LeaveType")
-                        .WithMany()
-                        .HasForeignKey("LeaveTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Leaves")
+                        .HasForeignKey("LeaveId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.RequestStatus", "RequestStatus")
-                        .WithMany()
-                        .HasForeignKey("RequestStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Leaves")
+                        .HasForeignKey("LeaveId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -877,7 +854,7 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Resumes")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Employee", "Employee")
@@ -896,7 +873,7 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Employee", "Employee")
                         .WithOne("Salary")
                         .HasForeignKey("HRMS.CORE.Salary", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -906,13 +883,13 @@ namespace HRMS.DAL.Migrations
                 {
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Users")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Employee", "Employee")
                         .WithOne("User")
-                        .HasForeignKey("HRMS.CORE.User", "EmployeeId")
+                        .HasForeignKey("HRMS.CORE.User", "Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -985,6 +962,8 @@ namespace HRMS.DAL.Migrations
 
                     b.Navigation("Events");
 
+                    b.Navigation("Jobs");
+
                     b.Navigation("Resumes");
 
                     b.Navigation("Users");
@@ -1007,6 +986,8 @@ namespace HRMS.DAL.Migrations
 
                     b.Navigation("Expenses");
 
+                    b.Navigation("Leaves");
+
                     b.Navigation("Resume")
                         .IsRequired();
 
@@ -1027,9 +1008,16 @@ namespace HRMS.DAL.Migrations
                     b.Navigation("Employees");
                 });
 
+            modelBuilder.Entity("HRMS.CORE.LeaveType", b =>
+                {
+                    b.Navigation("Leaves");
+                });
+
             modelBuilder.Entity("HRMS.CORE.RequestStatus", b =>
                 {
                     b.Navigation("Expenses");
+
+                    b.Navigation("Leaves");
                 });
 
             modelBuilder.Entity("HRMS.CORE.User", b =>

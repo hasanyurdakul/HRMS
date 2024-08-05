@@ -1,4 +1,6 @@
-﻿namespace HRMS.CORE;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HRMS.CORE;
 
 public class Address
 {
@@ -8,10 +10,12 @@ public class Address
     public string City { get; set; }
     public string State { get; set; }
     public string Country { get; set; }
+    [ForeignKey("Company")]
     public int? CompanyId { get; set; }
+    [ForeignKey("Employee")]
     public int? EmployeeId { get; set; }
 
-    // Navigation properties
+    // Navigation properties 
     public Company? Company { get; set; }
     public Employee? Employee { get; set; }
 }
