@@ -66,4 +66,33 @@ public class EmployeeService : IEmployeeService
         return employeeCard;
 
     }
+
+    public async Task<MyManagerCardDTO> GetMyManagerCardAsync(int employeeId)
+    {
+        var employee = await _context.Employees.FindAsync(employeeId);
+        if (employee == null || employee.ManagerId == 0)
+        {
+            return null;
+        }
+
+        var manager = await _context.Employees
+            .Include(m => m.Job)
+            .Include(m => m.Department)
+            .FirstOrDefaultAsync(m => m.EmployeeId == employee.ManagerId);
+
+        if (manager == null)
+        {
+            return null;
+        }
+
+        var managerDTO = new MyManagerCardDTO
+        {
+            ManagerFirstName = manager.FirstName,
+            ManagerLastName = manager.LastName,
+            JobTitle = manager.Job?.JobTitle,
+            DepartmentName = manager.Department?.DepartmentName
+        };
+
+        return managerDTO;
+    }
 }
