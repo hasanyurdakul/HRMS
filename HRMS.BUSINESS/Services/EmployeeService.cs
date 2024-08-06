@@ -28,14 +28,36 @@ public class EmployeeService : IEmployeeService
 
     }
 
+    public async Task<List<EmployeeDTO>> GetAllEmployeesAsync(int employeeId)
+    {
+        var employee = await _context.Employees.FindAsync(employeeId);
+        if (employee == null)
+        {
+            return null;
+        }
+
+        var companyEmployees = await _context.Employees
+            .Where(e => e.CompanyId == employee.CompanyId)
+            .Include(e => e.Job)
+            .Include(e => e.Department)
+            .Select(e => new EmployeeDTO
+            {
+                EmployeeImageUrl = e.ImageUrl,
+                EmployeeFirstName = e.FirstName,
+                EmployeeLastName = e.LastName,
+                EmployeeEmail = e.Email,
+                EmployeePhoneNumber = e.PhoneNumber,
+                JobTitle = e.Job.JobTitle,
+                DepartmentName = e.Department.DepartmentName
+            })
+            .ToListAsync();
+
+        return companyEmployees;
+    }
+
     public async Task<Employee> GetEmployeeById(int id)
     {
         return await _employeeRepository.GetByIdAsync(id);
-    }
-
-    public async Task<IList<Employee>> GetAllEmployees()
-    {
-        return (IList<Employee>)await _employeeRepository.GetAllAsync();
     }
 
     public async Task<EmployeeCardDTO> GetEmployeeCardAsync(int employeeId)
@@ -56,6 +78,8 @@ public class EmployeeService : IEmployeeService
         {
             EmployeeFirstName = employee.FirstName,
             EmployeeLastName = employee.LastName,
+            EmployeeEmail = employee.Email,
+            EmployeePhoneNumber = employee.PhoneNumber,
             JobTitle = employee.Job.JobTitle,
             DepartmentName = employee.Department.DepartmentName,
             ManagerName = manager != null ? $"{manager.FirstName} {manager.LastName}" : null,
@@ -89,6 +113,9 @@ public class EmployeeService : IEmployeeService
         {
             ManagerFirstName = manager.FirstName,
             ManagerLastName = manager.LastName,
+            ManagerImageUrl = manager.ImageUrl,
+            ManagerEmail = manager.Email,
+            ManagerPhoneNumber = manager.PhoneNumber,
             JobTitle = manager.Job?.JobTitle,
             DepartmentName = manager.Department?.DepartmentName
         };
