@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers/" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\HRMS.BUSINESS\HRMS.BUSINESS.csproj" />
     <ProjectReference Include="..\HRMS.CORE\HRMS.CORE.csproj" />
     <ProjectReference Include="..\HRMS.DAL\HRMS.DAL.csproj" />

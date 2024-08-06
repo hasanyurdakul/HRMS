@@ -20,7 +20,7 @@ public class Company
     [ForeignKey("ResumeId")]
     public int ResumeId { get; set; }
     [ForeignKey("UserId")]
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
     [ForeignKey("JobId")]
     public int JobId { get; set; }
 
@@ -30,6 +30,6 @@ public class Company
     public ICollection<Department> Departments { get; set; }
     public ICollection<Event> Events { get; set; }
     public ICollection<Resume> Resumes { get; set; }
-    public ICollection<User> Users { get; set; }
+    public ICollection<User>? Users { get; set; }
     public ICollection<Job> Jobs { get; set; }
 }

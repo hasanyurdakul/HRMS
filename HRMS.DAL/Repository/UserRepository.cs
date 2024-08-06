@@ -24,6 +24,7 @@ public class UserRepository : Repository<User>, IUserRepository
     public Task<User> GetUserByEmployeeId(int employeeId)
     {
         return _context.Users.FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+
     }
 
     public async Task<User> UpdateAsync(User user)
