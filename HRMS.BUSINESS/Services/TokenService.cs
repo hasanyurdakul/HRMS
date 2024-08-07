@@ -4,7 +4,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using HRMS.CORE;
+using HRMS.DAL;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,11 +16,13 @@ namespace HRMS.BUSINESS
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
+        private readonly AppDbContext _context;
 
-        public TokenService(IConfiguration configuration, UserManager<User> userManager)
+        public TokenService(IConfiguration configuration, UserManager<User> userManager, AppDbContext context)
         {
             _configuration = configuration;
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<string> GenerateToken(User user)
@@ -26,12 +30,31 @@ namespace HRMS.BUSINESS
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            var userEmployee = await _context.Employees.FirstOrDefaultAsync(x => x.UserId == user.Id);
+
+            var userCompanyId = user.CompanyId;
+            var userEmployeeId = userEmployee?.Id;
+
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            // companyId null değilse ekle
+            if (user.CompanyId != null)
+            {
+                claims.Add(new Claim("companyId", user.CompanyId.Value.ToString()));
+            }
+
+
+            // employeeId null değilse ekle
+            if (userEmployee.Id != null)
+            {
+                claims.Add(new Claim("employeeId", userEmployee.Id.ToString()));
+            }
+
 
             // Kullanıcının rollerini al ve token'a ekle
             var roles = await _userManager.GetRolesAsync(user);

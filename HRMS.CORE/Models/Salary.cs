@@ -6,7 +6,7 @@ namespace HRMS.CORE;
 public class Salary
 {
     public int Id { get; set; }
-    public int Amount { get; set; }
+    public decimal Amount { get; set; }
     //[ForeignKey("Employee")]
     public int EmployeeId { get; set; }
 

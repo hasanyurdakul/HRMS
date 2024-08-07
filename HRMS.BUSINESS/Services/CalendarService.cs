@@ -1,4 +1,5 @@
-﻿using HRMS.CORE;
+﻿using HRMS.BUSINESS.Interfaces;
+using HRMS.CORE;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRMS.DAL;

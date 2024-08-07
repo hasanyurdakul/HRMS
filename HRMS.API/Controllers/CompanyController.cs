@@ -65,6 +65,14 @@ public class CompanyController : ControllerBase
             Email = createCompanyDTO.CompanyEmail,
             PhoneNumber = createCompanyDTO.CompanyPhoneNumber,
             LogoUrl = createCompanyDTO.CompanyLogoUrl,
+            Address = new Address
+            {
+                StreetAddress = createCompanyDTO.createAddressDTO.StreetAddress,
+                PostalCode = createCompanyDTO.createAddressDTO.PostalCode,
+                City = createCompanyDTO.createAddressDTO.City,
+                State = createCompanyDTO.createAddressDTO.State,
+                Country = createCompanyDTO.createAddressDTO.Country,
+            }
         };
 
         await _companyRepository.AddAsync(company);

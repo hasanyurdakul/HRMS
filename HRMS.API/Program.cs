@@ -172,6 +172,8 @@
 using System.Security.Claims;
 using System.Text;
 using HRMS.BUSINESS;
+using HRMS.BUSINESS.Interfaces;
+using HRMS.BUSINESS.Services;
 using HRMS.CORE;
 using HRMS.DAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -221,9 +223,20 @@ builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ICalendarService, CalendarService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ISalaryService, SalaryService>();
 
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 
 
@@ -244,7 +257,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.MaxDepth = 64; // İsteğe bağlı olarak derinliği arttırabilirsiniz
+        });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -327,6 +345,8 @@ app.UseHttpsRedirection();
 
 
 app.UseRouting();
+app.UseCors("AllowAllOrigins");
+
 app.UseAuthentication();
 app.UseAuthorization();
 

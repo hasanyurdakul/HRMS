@@ -33,11 +33,13 @@ public class Repository<T> : IRepository<T> where T : class
     public async Task AddAsync(T entity)
     {
         await _entities.AddAsync(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task AddRangeAsync(IEnumerable<T> entities)
     {
         await _entities.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
     }
 
     public async Task RemoveAsync(T entity)
@@ -55,5 +57,6 @@ public class Repository<T> : IRepository<T> where T : class
     public void Update(T entity)
     {
         _entities.Update(entity);
+        _context.SaveChanges();
     }
 }

@@ -9,9 +9,6 @@ public class Company
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public string LogoUrl { get; set; }
-    //[ForeignKey("Address")]
-    //[ForeignKey("EmployeeId")]
-
 
     // Navigation properties
     public Address? Address { get; set; }
