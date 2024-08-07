@@ -169,6 +169,7 @@
 
 
 
+using System.Security.Claims;
 using System.Text;
 using HRMS.BUSINESS;
 using HRMS.CORE;
@@ -188,14 +189,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
-
+    .AddDefaultTokenProviders()
+    .AddSignInManager<SignInManager<User>>()
+    .AddRoleManager<RoleManager<Role>>()
+    .AddUserManager<UserManager<User>>();
 
 //Repositories
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-builder.Services.AddScoped<IEducationRepository, EducationRepository>();
+builder.Services.AddScoped<IEducationLevelRepository, EducationLevelRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
@@ -222,21 +225,25 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 
 
 
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
-            ValidateIssuer = false,
-            ValidateAudience = false
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            RoleClaimType = ClaimTypes.Role // Rol bazlı yetkilendirme için bu satırı ekleyin
         };
     });
 
-
 builder.Services.AddAuthorization();
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -316,26 +323,22 @@ using (var scope = app.Services.CreateScope())
 
 
 
-
-
-
-
-// Configure the HTTP request pipeline.
-
-app.UseSwagger();
-app.UseSwaggerUI();
-// app.UseSwaggerUI(c =>
-//     {
-//         c.SwaggerEndpoint("/swagger/v1/swagger.json", "HRMS API V1");
-//     });
-
 app.UseHttpsRedirection();
 
-app.UseRouting();
 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "HRMS API V1");
+});
 app.MapControllers();
+
+
+
+
 
 app.Run();

@@ -16,7 +16,8 @@ public class CompanyService : ICompanyService
     {
         var today = DateTime.Today;
         var employees = await _context.Employees
-            .Where(e => e.CompanyId == companyId)
+        .Include(e => e.Department)
+            .Where(e => e.Id == companyId)
             .OrderBy(e => EF.Functions.DateDiffDay(today, e.BirthDate))
             .Select(e => new UpcomingBirthdaysDTO
             {

@@ -4,7 +4,7 @@ namespace HRMS.CORE;
 
 public class Employee
 {
-    public int EmployeeId { get; set; }
+    public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -13,33 +13,28 @@ public class Employee
     public DateTime BirthDate { get; set; }
     public string PhoneNumber { get; set; }
     public int RemainingLeaveDays { get; set; }
-    [ForeignKey("Address")]
-    public int AddressId { get; set; }
-    [ForeignKey("Company")]
+    //[ForeignKey("Address")]
+    //[ForeignKey("Company")]
     public int CompanyId { get; set; }
-    [ForeignKey("Education")]
-    public int EducationId { get; set; }
-    [ForeignKey("Gender")]
+    //[ForeignKey("Education")]
+    public int EducationLevelId { get; set; }
+    //[ForeignKey("Gender")]
     public int GenderId { get; set; }
-    [ForeignKey("Job")]
+    //[ForeignKey("Job")]
     public int JobId { get; set; }
-    [ForeignKey("Department")]
+    //[ForeignKey("Department")]
     public int DepartmentId { get; set; }
-    public int? ManagerId { get; set; }
-    [ForeignKey("Salary")]
-    public int SalaryId { get; set; }
+    public int? ManagerEmployeeId { get; set; }
+    //[ForeignKey("Salary")]
     public bool isActive { get; set; }
-    [ForeignKey("Resume")]
-    public int ResumeId { get; set; }
-    [ForeignKey("Expense")]
-    public int? ExpenseId { get; set; }
-    [ForeignKey("User")]
+    //[ForeignKey("Resume")]
+    //[ForeignKey("Expense")]
+    //[ForeignKey("User")]
     public int? UserId { get; set; }
-    [ForeignKey("Leave")]
-    public int? LeaveId { get; set; }
+    //[ForeignKey("Leave")]
 
     // Navigation properties
-    public Education Education { get; set; }
+    public EducationLevel EducationLevel { get; set; }
     public Gender Gender { get; set; }
     public Company Company { get; set; }
     public Job Job { get; set; }

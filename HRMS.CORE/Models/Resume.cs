@@ -6,12 +6,11 @@ namespace HRMS.CORE;
 
 public class Resume
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int ResumeId { get; set; }
-    public string ResumePath { get; set; }
-    [ForeignKey("Company")]
+    public int Id { get; set; }
+    public string Path { get; set; }
+    //[ForeignKey("Company")]
     public int CompanyId { get; set; }
-    [ForeignKey("Employee")]
+    //[ForeignKey("Employee")]
     public int EmployeeId { get; set; }
 
     // Navigation properties

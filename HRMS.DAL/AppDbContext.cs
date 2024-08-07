@@ -9,7 +9,7 @@ namespace HRMS.DAL
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<Education> Educations { get; set; }
+        public DbSet<EducationLevel> EducationLevels { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<Resume> Resumes { get; set; }
         public DbSet<Leave> Leaves { get; set; }
@@ -27,6 +27,29 @@ namespace HRMS.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
+            modelBuilder.Entity<Resume>()
+                    .HasOne(e => e.Employee)
+                    .WithOne(e => e.Resume)
+                    .HasForeignKey<Resume>(e => e.EmployeeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Employee>()
+                    .HasOne(e => e.Department)
+                    .WithMany(e => e.Employees)
+                    .HasForeignKey(e => e.DepartmentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Employee>()
+                    .HasOne(e => e.Job)
+                    .WithMany(e => e.Employees)
+                    .HasForeignKey(e => e.JobId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+
+
 
             // modelBuilder.Entity<Address>()
             //     .HasOne(a => a.Employee)
@@ -252,7 +275,11 @@ namespace HRMS.DAL
             //     .IsRequired(false)
             //     .OnDelete(DeleteBehavior.Restrict);
 
+
+
             // Address configuration
+
+            /*
             modelBuilder.Entity<Address>()
               .HasOne(a => a.Employee)
               .WithOne(e => e.Address)
@@ -263,6 +290,7 @@ namespace HRMS.DAL
                 .HasOne(a => a.Company)
                 .WithOne(c => c.Address)
                 .HasForeignKey<Address>(a => a.CompanyId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
 
@@ -271,6 +299,7 @@ namespace HRMS.DAL
                 .HasOne(c => c.Address)
                 .WithOne(a => a.Company)
                 .HasForeignKey<Company>(c => c.AddressId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Company>()
@@ -301,6 +330,7 @@ namespace HRMS.DAL
                 .HasMany(c => c.Users)
                 .WithOne(u => u.Company)
                 .HasForeignKey(u => u.CompanyId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Department configuration
@@ -466,11 +496,21 @@ namespace HRMS.DAL
                 .HasForeignKey(ev => ev.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Company)
+                .WithMany(c => c.Users)
+                .HasForeignKey(u => u.CompanyId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             // NationalHoliday configuration (example)
             modelBuilder.Entity<NationalHoliday>()
                 .Property(nh => nh.NationalHolidayName)
                 .IsRequired()
                 .HasMaxLength(100);
+
+                */
         }
     }
 }

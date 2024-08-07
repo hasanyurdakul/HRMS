@@ -2,7 +2,7 @@
 
 public interface ICompanyRepository : IRepository<Company>
 {
-    Task<Company> UpdateAsync(Company company);
-    Task<Company> DeleteAsync(Company company);
+    Task UpdateAsync(Company company);
+    Task DeleteAsync(Company company);
 
 }

@@ -1,7 +1,7 @@
 ﻿namespace HRMS.CORE;
 
-public interface IEducationRepository : IRepository<Education>
+public interface IEducationLevelRepository : IRepository<EducationLevel>
 {
-    Task<Education> UpdateAsync(Education education);
-    Task<Education> DeleteAsync(Education education);
+    Task<EducationLevel> UpdateAsync(EducationLevel education);
+    Task<EducationLevel> DeleteAsync(EducationLevel education);
 }

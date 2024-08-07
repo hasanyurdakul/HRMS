@@ -4,10 +4,9 @@ namespace HRMS.CORE;
 
 public class LeaveType
 {
-    public int LeaveTypeId { get; set; }
-    public string LeaveTypeName { get; set; }
-    [ForeignKey("Leave")]
-    public int LeaveId { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    //[ForeignKey("Leave")]
 
     // Navigation properties
     public ICollection<Leave> Leaves { get; set; }

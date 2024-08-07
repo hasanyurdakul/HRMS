@@ -2,8 +2,8 @@
 
 public class NationalHoliday
 {
-    public int NationalHolidayId { get; set; }
-    public string NationalHolidayName { get; set; }
-    public DateTime NationalHolidayStartDate { get; set; }
-    public DateTime NationalHolidayEndDate { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 }

@@ -31,7 +31,7 @@ public class LeaveService : ILeaveService
 
         var leaveDetails = leaves.Select(l => new LeaveDetailDTO
         {
-            LeaveType = l.LeaveType.LeaveTypeName,
+            LeaveType = l.LeaveType.Name,
             StartDate = l.StartDate,
             EndDate = l.EndDate
         }).ToList();

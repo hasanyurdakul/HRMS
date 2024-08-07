@@ -15,7 +15,8 @@ public class CalendarService : ICalendarService
     public async Task<List<CalendarEventDTO>> GetCompanyCalendarEventsAsync(int companyId)
     {
         var companyEmployees = await _context.Employees
-                        .Where(e => e.CompanyId == companyId)
+                        .Include(e => e.Department)
+                        .Where(e => e.Department.CompanyId == companyId)
                         .Select(e => new CalendarEventDTO
                         {
                             Title = $"{e.FirstName} {e.LastName}'s Birthday",
@@ -29,21 +30,21 @@ public class CalendarService : ICalendarService
             .Where(e => e.CompanyId == companyId)
             .Select(e => new CalendarEventDTO
             {
-                Title = e.EventName,
-                Start = e.EventStartDate,
-                End = e.EventEndDate,
+                Title = e.Name,
+                Start = e.StartDate,
+                End = e.EndDate,
                 Type = "Event",
-                Description = e.EventDescription
+                Description = e.Description
             }).ToListAsync();
 
         var nationalHolidays = await _context.NationalHolidays
             .Select(h => new CalendarEventDTO
             {
-                Title = h.NationalHolidayName,
-                Start = h.NationalHolidayStartDate,
-                End = h.NationalHolidayEndDate,
+                Title = h.Name,
+                Start = h.StartDate,
+                End = h.EndDate,
                 Type = "NationalHoliday",
-                Description = h.NationalHolidayName
+                Description = h.Name
             }).ToListAsync();
 
         return companyEmployees.Concat(companyEvents).Concat(nationalHolidays).ToList();

@@ -5,13 +5,11 @@ namespace HRMS.CORE;
 
 public class Department
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int DepartmentId { get; set; }
-    public string DepartmentName { get; set; }
-    [ForeignKey("Company")]
+    public int Id { get; set; }
+    public string Name { get; set; }
+    //[ForeignKey("Company")]
     public int CompanyId { get; set; }
-    [ForeignKey("Employee")]
-    public int EmployeeId { get; set; }
+    //[ForeignKey("Employee")]
 
     // Navigation properties
     public Company Company { get; set; }

@@ -17,17 +17,18 @@ public class EventService : IEventService
     {
         var today = DateTime.Today;
         var events = await _context.Events
-            .Where(e => e.CompanyId == companyId && e.EventStartDate >= today)
-            .OrderBy(e => e.EventStartDate)
+            .Where(e => e.CompanyId == companyId && e.StartDate >= today)
+            .OrderBy(e => e.StartDate)
             .Select(e => new UpcomingEventsDTO
             {
-                EventName = e.EventName,
-                EventStartDate = e.EventStartDate,
-                EventEndDate = e.EventEndDate,
-                EventDescription = e.EventDescription,
-                EventCreatorName = _context.Employees
-                    .Where(emp => emp.EmployeeId == e.User.EmployeeId)
-                    .Select(emp => $"{emp.FirstName} {emp.LastName}")
+                EventName = e.Name,
+                EventStartDate = e.StartDate,
+                EventEndDate = e.EndDate,
+                EventDescription = e.Description,
+                EventCreatorName = _context.Users
+                    .Include(u => u.Employee)
+                    .Where(u => u.Id == e.UserId)
+                    .Select(u => $"{u.Employee.FirstName} {u.Employee.LastName}")
                     .FirstOrDefault()
             }).ToListAsync();
 

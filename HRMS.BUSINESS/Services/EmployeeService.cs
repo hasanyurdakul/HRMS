@@ -47,8 +47,8 @@ public class EmployeeService : IEmployeeService
                 EmployeeLastName = e.LastName,
                 EmployeeEmail = e.Email,
                 EmployeePhoneNumber = e.PhoneNumber,
-                JobTitle = e.Job.JobTitle,
-                DepartmentName = e.Department.DepartmentName
+                JobTitle = e.Job.Title,
+                DepartmentName = e.Department.Name
             })
             .ToListAsync();
 
@@ -65,14 +65,14 @@ public class EmployeeService : IEmployeeService
         var employee = await _context.Employees
                        .Include(e => e.Job)
                        .Include(e => e.Department)
-                       .FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
+                       .FirstOrDefaultAsync(e => e.Id == employeeId);
 
         if (employee == null)
         {
             return null;
         }
 
-        var manager = await _context.Employees.FindAsync(employee.ManagerId);
+        var manager = await _context.Employees.FindAsync(employee.ManagerEmployeeId);
 
         var employeeCard = new EmployeeCardDTO
         {
@@ -80,8 +80,8 @@ public class EmployeeService : IEmployeeService
             EmployeeLastName = employee.LastName,
             EmployeeEmail = employee.Email,
             EmployeePhoneNumber = employee.PhoneNumber,
-            JobTitle = employee.Job.JobTitle,
-            DepartmentName = employee.Department.DepartmentName,
+            JobTitle = employee.Job.Title,
+            DepartmentName = employee.Department.Name,
             ManagerName = manager != null ? $"{manager.FirstName} {manager.LastName}" : null,
             HireDate = employee.HireDate,
             ImageUrl = employee.ImageUrl
@@ -94,7 +94,7 @@ public class EmployeeService : IEmployeeService
     public async Task<MyManagerCardDTO> GetMyManagerCardAsync(int employeeId)
     {
         var employee = await _context.Employees.FindAsync(employeeId);
-        if (employee == null || employee.ManagerId == 0)
+        if (employee == null || employee.ManagerEmployeeId == 0)
         {
             return null;
         }
@@ -102,7 +102,7 @@ public class EmployeeService : IEmployeeService
         var manager = await _context.Employees
             .Include(m => m.Job)
             .Include(m => m.Department)
-            .FirstOrDefaultAsync(m => m.EmployeeId == employee.ManagerId);
+            .FirstOrDefaultAsync(m => m.Id == employee.ManagerEmployeeId);
 
         if (manager == null)
         {
@@ -116,8 +116,8 @@ public class EmployeeService : IEmployeeService
             ManagerImageUrl = manager.ImageUrl,
             ManagerEmail = manager.Email,
             ManagerPhoneNumber = manager.PhoneNumber,
-            JobTitle = manager.Job?.JobTitle,
-            DepartmentName = manager.Department?.DepartmentName
+            JobTitle = manager.Job?.Title,
+            DepartmentName = manager.Department?.Name
         };
 
         return managerDTO;

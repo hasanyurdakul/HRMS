@@ -14,33 +14,33 @@ public static class SeedData
 
         // + Seed data for Genders
         context.Genders.AddRange(
-            new Gender { GenderName = "Male" },
-            new Gender { GenderName = "Female" }
+            new Gender { Name = "Male" },
+            new Gender { Name = "Female" }
         );
         context.SaveChanges();
 
         // + Seed data for Leave Types
         context.LeaveTypes.AddRange(
-            new LeaveType { LeaveTypeName = "Sick Leave" },
-            new LeaveType { LeaveTypeName = "Vacation Leave" },
-            new LeaveType { LeaveTypeName = "Personal Leave" }
+            new LeaveType { Name = "Sick Leave" },
+            new LeaveType { Name = "Vacation Leave" },
+            new LeaveType { Name = "Personal Leave" }
         );
         context.SaveChanges();
 
         // + Seed data for Request Statuses
         context.RequestStatuses.AddRange(
-            new RequestStatus { RequestStatusName = "Pending" },
-            new RequestStatus { RequestStatusName = "Approved" },
-            new RequestStatus { RequestStatusName = "Rejected" }
+            new RequestStatus { Name = "Pending" },
+            new RequestStatus { Name = "Approved" },
+            new RequestStatus { Name = "Rejected" }
         );
         context.SaveChanges();
 
         // + Seed data for Education 
-        context.Educations.AddRange(
-            new Education { EducationLevel = "High School" },
-            new Education { EducationLevel = "Bachelor's Degree" },
-            new Education { EducationLevel = "Master's Degree" },
-            new Education { EducationLevel = "Doctorate" }
+        context.EducationLevels.AddRange(
+            new EducationLevel { Name = "High School" },
+            new EducationLevel { Name = "Bachelor's Degree" },
+            new EducationLevel { Name = "Master's Degree" },
+            new EducationLevel { Name = "Doctorate" }
         );
         context.SaveChanges();
 
@@ -49,10 +49,10 @@ public static class SeedData
         context.Companies.AddRange(
             new Company
             {
-                CompanyName = "Sample Company 1",
-                CompanyEmail = "info@samplewcompany1.com",
-                CompanyPhoneNumber = "+1 (555) 555-1212",
-                CompanyLogoUrl = "https://via.placeholder.com/150",
+                Name = "Sample Company 1",
+                Email = "info@samplewcompany1.com",
+                PhoneNumber = "+1 (555) 555-1212",
+                LogoUrl = "https://via.placeholder.com/150",
                 Address = new Address
                 {
                     StreetAddress = "123 Main St",
@@ -60,7 +60,6 @@ public static class SeedData
                     State = "NY",
                     PostalCode = "12345",
                     Country = "USA",
-                    CompanyId = 1
                 }
             }
         );
@@ -77,16 +76,13 @@ public static class SeedData
                 BirthDate = DateTime.Now.AddYears(-30),
                 PhoneNumber = "+1 (555) 555-4545",
                 RemainingLeaveDays = 14,
-                EducationId = 2,
+                EducationLevelId = 2,
                 GenderId = 1,
                 CompanyId = 1,
                 JobId = 1,
                 DepartmentId = 1,
-                ManagerId = 1,
-                AddressId = 1,
-                SalaryId = 1,
+                ManagerEmployeeId = 1,
                 isActive = true,
-                ResumeId = 1,
                 Address = new Address
                 {
                     StreetAddress = "44444 Main St",
@@ -97,21 +93,19 @@ public static class SeedData
                 },
                 Resume = new Resume
                 {
-                    ResumePath = "https://via.placeholder.com/150",
+                    Path = "https://via.placeholder.com/150",
                     CompanyId = 1,
                     EmployeeId = 1
                 },
                 Job = new Job
                 {
-                    JobTitle = "Human Resources Manager",
+                    Title = "Human Resources Manager",
                     CompanyId = 1,
-                    EmployeeId = 1
                 },
                 Department = new Department
                 {
-                    DepartmentName = "Human Resources",
+                    Name = "Human Resources",
                     CompanyId = 1,
-                    EmployeeId = 1
                 },
                 Salary = new Salary
                 {

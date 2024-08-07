@@ -2,12 +2,11 @@
 
 namespace HRMS.CORE;
 
-public class Education
+public class EducationLevel
 {
-    public int EducationId { get; set; }
-    public string EducationLevel { get; set; }
-    [ForeignKey("Employee")]
-    public int EmployeeId { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    //[ForeignKey("Employee")]
 
 
     // Navigation properties

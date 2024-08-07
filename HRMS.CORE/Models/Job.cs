@@ -4,12 +4,11 @@ namespace HRMS.CORE;
 
 public class Job
 {
-    public int JobId { get; set; }
-    public string JobTitle { get; set; }
-    [ForeignKey("Company")]
+    public int Id { get; set; }
+    public string Title { get; set; }
+    //[ForeignKey("Company")]
     public int CompanyId { get; set; }
-    [ForeignKey("Employee")]
-    public int EmployeeId { get; set; }
+    //[ForeignKey("Employee")]
 
     // Navigation properties
     public Company Company { get; set; }

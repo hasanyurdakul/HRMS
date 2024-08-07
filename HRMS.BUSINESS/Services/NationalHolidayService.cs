@@ -17,14 +17,14 @@ public class NationalHolidayService : INationalHolidayService
     {
         var today = DateTime.Today;
         var holidays = await _context.NationalHolidays
-            .Where(h => h.NationalHolidayStartDate >= today)
-            .OrderBy(h => h.NationalHolidayStartDate)
+            .Where(h => h.StartDate >= today)
+            .OrderBy(h => h.StartDate)
             .Take(5)
             .Select(h => new UpcomingNationalHolidayDTO
             {
-                NationalHolidayName = h.NationalHolidayName,
-                NationalHolidayStartDate = h.NationalHolidayStartDate,
-                NationalHolidayEndDate = h.NationalHolidayEndDate
+                NationalHolidayName = h.Name,
+                NationalHolidayStartDate = h.StartDate,
+                NationalHolidayEndDate = h.EndDate
             })
             .ToListAsync();
 

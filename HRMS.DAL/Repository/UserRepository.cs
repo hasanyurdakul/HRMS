@@ -23,7 +23,7 @@ public class UserRepository : Repository<User>, IUserRepository
 
     public Task<User> GetUserByEmployeeId(int employeeId)
     {
-        return _context.Users.FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+        return _context.Users.Include(e => e.Employee).FirstOrDefaultAsync(u => u.Employee.Id == employeeId);
 
     }
 

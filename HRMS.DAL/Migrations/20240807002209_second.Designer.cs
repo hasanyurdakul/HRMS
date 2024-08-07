@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMS.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240806141003_Test11")]
-    partial class Test11
+    [Migration("20240807002209_second")]
+    partial class second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Address", b =>
                 {
-                    b.Property<int>("AddressId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -59,7 +59,11 @@ namespace HRMS.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AddressId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId")
+                        .IsUnique()
+                        .HasFilter("[CompanyId] IS NOT NULL");
 
                     b.HasIndex("EmployeeId")
                         .IsUnique()
@@ -70,112 +74,79 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Company", b =>
                 {
-                    b.Property<int>("CompanyId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CompanyEmail")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyLogoUrl")
+                    b.Property<string>("LogoUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyPhoneNumber")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResumeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CompanyId");
-
-                    b.HasIndex("AddressId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Department", b =>
                 {
-                    b.Property<int>("DepartmentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DepartmentName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DepartmentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("HRMS.CORE.Education", b =>
+            modelBuilder.Entity("HRMS.CORE.EducationLevel", b =>
                 {
-                    b.Property<int>("EducationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EducationId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("EducationLevel")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.HasKey("EducationId");
-
-                    b.ToTable("Educations");
+                    b.ToTable("EducationLevels");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Employee", b =>
                 {
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -186,15 +157,12 @@ namespace HRMS.DAL.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EducationId")
+                    b.Property<int>("EducationLevelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ExpenseId")
-                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -216,10 +184,7 @@ namespace HRMS.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LeaveId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ManagerId")
+                    b.Property<int?>("ManagerEmployeeId")
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -229,62 +194,60 @@ namespace HRMS.DAL.Migrations
                     b.Property<int>("RemainingLeaveDays")
                         .HasColumnType("int");
 
-                    b.Property<int>("ResumeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SalaryId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
 
-                    b.HasKey("EmployeeId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("EducationId");
+                    b.HasIndex("EducationLevelId");
 
                     b.HasIndex("GenderId");
 
                     b.HasIndex("JobId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Event", b =>
                 {
-                    b.Property<int>("EventId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("EventDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EventEndDate")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EventName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EventStartDate")
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("EventId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
@@ -295,11 +258,11 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Expense", b =>
                 {
-                    b.Property<int>("ExpenseId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpenseId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -307,15 +270,14 @@ namespace HRMS.DAL.Migrations
                     b.Property<int>("ApprovedById")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ExpenseDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ExpenseDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RequestStatusId")
                         .HasColumnType("int");
@@ -323,7 +285,7 @@ namespace HRMS.DAL.Migrations
                     b.Property<DateTime>("RequestedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ExpenseId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
 
@@ -334,43 +296,37 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Gender", b =>
                 {
-                    b.Property<int>("GenderId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenderId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("GenderName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("GenderId");
+                    b.HasKey("Id");
 
                     b.ToTable("Genders");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Job", b =>
                 {
-                    b.Property<int>("JobId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("JobTitle")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("JobId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
@@ -379,11 +335,11 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Leave", b =>
                 {
-                    b.Property<int>("LeaveId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeaveId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ApprovedById")
                         .HasColumnType("int");
@@ -406,7 +362,7 @@ namespace HRMS.DAL.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("LeaveId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
 
@@ -419,78 +375,68 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.LeaveType", b =>
                 {
-                    b.Property<int>("LeaveTypeId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeaveTypeId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("LeaveId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LeaveTypeName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LeaveTypeId");
+                    b.HasKey("Id");
 
                     b.ToTable("LeaveTypes");
                 });
 
             modelBuilder.Entity("HRMS.CORE.NationalHoliday", b =>
                 {
-                    b.Property<int>("NationalHolidayId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NationalHolidayId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("NationalHolidayEndDate")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("NationalHolidayName")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("NationalHolidayStartDate")
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("NationalHolidayId");
+                    b.HasKey("Id");
 
                     b.ToTable("NationalHolidays");
                 });
 
             modelBuilder.Entity("HRMS.CORE.RequestStatus", b =>
                 {
-                    b.Property<int>("RequestStatusId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestStatusId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ExpenseId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LeaveId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RequestStatusName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("RequestStatusId");
+                    b.HasKey("Id");
 
                     b.ToTable("RequestStatuses");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Resume", b =>
                 {
-                    b.Property<int>("ResumeId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResumeId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -498,11 +444,11 @@ namespace HRMS.DAL.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ResumePath")
+                    b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ResumeId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
@@ -544,11 +490,11 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Salary", b =>
                 {
-                    b.Property<int>("SalaryId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalaryId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -556,7 +502,7 @@ namespace HRMS.DAL.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.HasKey("SalaryId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EmployeeId")
                         .IsUnique();
@@ -588,9 +534,6 @@ namespace HRMS.DAL.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -628,10 +571,6 @@ namespace HRMS.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique()
-                        .HasFilter("[EmployeeId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -749,23 +688,17 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.Address", b =>
                 {
+                    b.HasOne("HRMS.CORE.Company", "Company")
+                        .WithOne("Address")
+                        .HasForeignKey("HRMS.CORE.Address", "CompanyId");
+
                     b.HasOne("HRMS.CORE.Employee", "Employee")
                         .WithOne("Address")
-                        .HasForeignKey("HRMS.CORE.Address", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("HRMS.CORE.Address", "EmployeeId");
+
+                    b.Navigation("Company");
 
                     b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("HRMS.CORE.Company", b =>
-                {
-                    b.HasOne("HRMS.CORE.Address", "Address")
-                        .WithOne("Company")
-                        .HasForeignKey("HRMS.CORE.Company", "AddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Department", b =>
@@ -773,7 +706,7 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Departments")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -784,7 +717,7 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Employees")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Department", "Department")
@@ -793,16 +726,16 @@ namespace HRMS.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("HRMS.CORE.Education", "Education")
+                    b.HasOne("HRMS.CORE.EducationLevel", "EducationLevel")
                         .WithMany("Employees")
-                        .HasForeignKey("EducationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("EducationLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Gender", "Gender")
                         .WithMany("Employees")
                         .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Job", "Job")
@@ -811,15 +744,21 @@ namespace HRMS.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("HRMS.CORE.User", "User")
+                        .WithOne("Employee")
+                        .HasForeignKey("HRMS.CORE.Employee", "UserId");
+
                     b.Navigation("Company");
 
                     b.Navigation("Department");
 
-                    b.Navigation("Education");
+                    b.Navigation("EducationLevel");
 
                     b.Navigation("Gender");
 
                     b.Navigation("Job");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Event", b =>
@@ -827,13 +766,13 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Events")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.User", "User")
                         .WithMany("Events")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -846,13 +785,13 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Employee", "Employee")
                         .WithMany("Expenses")
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.RequestStatus", "RequestStatus")
                         .WithMany("Expenses")
                         .HasForeignKey("RequestStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -865,7 +804,7 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Jobs")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -876,19 +815,19 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Employee", "Employee")
                         .WithMany("Leaves")
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.LeaveType", "LeaveType")
                         .WithMany("Leaves")
                         .HasForeignKey("LeaveTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.RequestStatus", "RequestStatus")
                         .WithMany("Leaves")
                         .HasForeignKey("RequestStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -903,7 +842,7 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Resumes")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMS.CORE.Employee", "Employee")
@@ -922,7 +861,7 @@ namespace HRMS.DAL.Migrations
                     b.HasOne("HRMS.CORE.Employee", "Employee")
                         .WithOne("Salary")
                         .HasForeignKey("HRMS.CORE.Salary", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -932,17 +871,9 @@ namespace HRMS.DAL.Migrations
                 {
                     b.HasOne("HRMS.CORE.Company", "Company")
                         .WithMany("Users")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("HRMS.CORE.Employee", "Employee")
-                        .WithOne("User")
-                        .HasForeignKey("HRMS.CORE.User", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -996,13 +927,10 @@ namespace HRMS.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HRMS.CORE.Address", b =>
-                {
-                    b.Navigation("Company");
-                });
-
             modelBuilder.Entity("HRMS.CORE.Company", b =>
                 {
+                    b.Navigation("Address");
+
                     b.Navigation("Departments");
 
                     b.Navigation("Employees");
@@ -1021,7 +949,7 @@ namespace HRMS.DAL.Migrations
                     b.Navigation("Employees");
                 });
 
-            modelBuilder.Entity("HRMS.CORE.Education", b =>
+            modelBuilder.Entity("HRMS.CORE.EducationLevel", b =>
                 {
                     b.Navigation("Employees");
                 });
@@ -1040,8 +968,6 @@ namespace HRMS.DAL.Migrations
 
                     b.Navigation("Salary")
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HRMS.CORE.Gender", b =>
@@ -1068,6 +994,8 @@ namespace HRMS.DAL.Migrations
 
             modelBuilder.Entity("HRMS.CORE.User", b =>
                 {
+                    b.Navigation("Employee");
+
                     b.Navigation("Events");
                 });
 #pragma warning restore 612, 618

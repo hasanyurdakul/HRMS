@@ -5,10 +5,9 @@ namespace HRMS.CORE;
 
 public class Salary
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int SalaryId { get; set; }
+    public int Id { get; set; }
     public int Amount { get; set; }
-    [ForeignKey("Employee")]
+    //[ForeignKey("Employee")]
     public int EmployeeId { get; set; }
 
     // Navigation properties
