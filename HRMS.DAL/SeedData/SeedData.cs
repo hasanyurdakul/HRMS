@@ -101,11 +101,13 @@ public static class SeedData
                 {
                     Title = "Human Resources Manager",
                     CompanyId = 1,
+                    isActive = true
                 },
                 Department = new Department
                 {
                     Name = "Human Resources",
                     CompanyId = 1,
+                    isActive = true
                 },
                 Salary = new Salary
                 {

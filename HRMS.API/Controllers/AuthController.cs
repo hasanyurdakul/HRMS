@@ -4,6 +4,8 @@ using HRMS.CORE;
 using System.Threading.Tasks;
 using HRMS.BUSINESS;
 using Microsoft.AspNetCore.Authorization;
+using HRMS.API.Utility;
+using HRMS.BUSINESS.Interfaces;
 
 namespace HRMS.API.Controllers
 {
@@ -15,13 +17,15 @@ namespace HRMS.API.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IEmployeeService _employeeService;
+        private readonly IEmailService _emailService;
 
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IEmployeeService employeeService)
+        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IEmployeeService employeeService, IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _employeeService = employeeService;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]
@@ -84,11 +88,20 @@ namespace HRMS.API.Controllers
                 Employee = employee
             };
 
-            var result = await _userManager.CreateAsync(newUser, model.Password);
+            var passwordGenerator = new PasswordGenerator();
+            string randomPassword = passwordGenerator.GenerateRandomPassword(12);
+            Console.WriteLine("###########PASSWORD########### \n" + randomPassword);
+
+
+            var result = await _userManager.CreateAsync(newUser, randomPassword);
 
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(newUser, roleToAssign);
+                // Şifreyi kullanıcıya e-posta ile gönder
+                string subject = "Your new account password";
+                string body = $"Hello {newUser.UserName},\n\nYour account has been created. Here is your password: {randomPassword}";
+                await _emailService.SendEmailAsync(newUser.Email, subject, body);
                 return Ok($"User created successfully with role: {roleToAssign}");
             }
 

@@ -5,7 +5,7 @@ namespace HRMS.CORE;
 public class Expense
 {
     public int Id { get; set; }
-    public int Amount { get; set; }
+    public decimal Amount { get; set; }
     public DateTime ExpenseDate { get; set; }
     public string? Description { get; set; }
     public DateTime RequestedDate { get; set; }

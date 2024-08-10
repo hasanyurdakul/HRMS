@@ -6,9 +6,8 @@ public class Job
 {
     public int Id { get; set; }
     public string Title { get; set; }
-    //[ForeignKey("Company")]
     public int CompanyId { get; set; }
-    //[ForeignKey("Employee")]
+    public bool isActive { get; set; }
 
     // Navigation properties
     public Company Company { get; set; }

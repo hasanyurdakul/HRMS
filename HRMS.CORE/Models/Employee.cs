@@ -23,22 +23,26 @@ public class Employee
     public int? UserId { get; set; }
 
     // Navigation properties
-    //OK
+    // OK
     public EducationLevel? EducationLevel { get; set; }
-    //OK
+    // OK
     public Gender? Gender { get; set; }
-    //OK
+    // OK
     public Company? Company { get; set; }
-    // NO
+    // OK 
     public Job? Job { get; set; }
-    // NO
+    // OK
     public Department? Department { get; set; }
     // OK
     public Address? Address { get; set; }
-
+    // OK
     public Salary? Salary { get; set; }
+    // OK
     public Resume? Resume { get; set; }
+    // OK
     public ICollection<Expense>? Expenses { get; set; }
+    // OK
     public ICollection<Leave>? Leaves { get; set; }
+    // OK
     public User? User { get; set; }
 }

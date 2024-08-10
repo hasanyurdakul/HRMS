@@ -50,7 +50,7 @@ namespace HRMS.BUSINESS
 
 
             // employeeId null değilse ekle
-            if (userEmployee.Id != null)
+            if (userEmployee != null && userEmployee.Id != null)
             {
                 claims.Add(new Claim("employeeId", userEmployee.Id.ToString()));
             }

@@ -19,5 +19,7 @@ public class CreateEmployeeDTO
     public bool isActive { get; set; }
     public int? UserId { get; set; }
     public CreateAddressDTO createAddressDTO { get; set; }
+    public SalaryDTO SalaryDTO { get; set; }
+    public CreateResumeDTO createResumeDTO { get; set; }
 
 }

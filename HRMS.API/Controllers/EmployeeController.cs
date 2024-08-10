@@ -42,8 +42,7 @@ namespace HRMS.API.Controllers
                 return BadRequest("User or CompanyId not found.");
             }
 
-            var employees = await _employeeRepository.FindAsync(e => e.CompanyId == user.CompanyId.Value);
-
+            var employees = await _context.Employees.Where(e => e.CompanyId == user.CompanyId).Where(e => e.isActive == true).ToListAsync();
             var getEmployeeDTOs = employees.Select(e => new GetEmployeeDTO
             {
                 Id = e.Id,
@@ -113,6 +112,15 @@ namespace HRMS.API.Controllers
                 isActive = createEmployeeDto.isActive,
                 UserId = createEmployeeDto.UserId,
                 CompanyId = user.CompanyId.Value,
+                Resume = new Resume
+                {
+                    Path = createEmployeeDto.createResumeDTO.Path,
+                    CompanyId = user.CompanyId.Value,
+                },
+                Salary = new Salary
+                {
+                    Amount = (decimal)createEmployeeDto.SalaryDTO.Amount,
+                },
                 Address = new Address
                 {
                     StreetAddress = createEmployeeDto.createAddressDTO.StreetAddress,
@@ -187,21 +195,9 @@ namespace HRMS.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userRepository.GetByIdAsync(int.Parse(userId));
-
-            if (user == null || user.CompanyId == null)
-            {
-                return BadRequest("User or CompanyId not found.");
-            }
-
             var employee = await _employeeRepository.GetByIdAsync(id);
-            if (employee == null || employee.CompanyId != user.CompanyId)
-            {
-                return NotFound();
-            }
-
-            await _employeeRepository.DeleteAsync(employee);
+            employee.isActive = false;
+            await _employeeRepository.UpdateAsync(employee);
 
             return Ok("Employee deleted successfully.");
         }
@@ -268,6 +264,83 @@ namespace HRMS.API.Controllers
 
             await _salaryService.DeleteSalary(salaryId);
             return Ok("Salary deleted successfully.");
+        }
+
+        // POST: api/Employee/assign-job
+        [HttpPost("assign-job")]
+        public async Task<IActionResult> AssignJob(JobAssignmentDTO jobAssignmentDto)
+        {
+            var employee = await _employeeRepository.GetByIdAsync(jobAssignmentDto.EmployeeId);
+            if (employee == null)
+            {
+                return NotFound("Employee not found.");
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userRepository.GetByIdAsync(int.Parse(userId));
+
+            if (user == null || user.CompanyId == null || employee.CompanyId != user.CompanyId)
+            {
+                return BadRequest("User or CompanyId not found or mismatch.");
+            }
+
+            employee.JobId = jobAssignmentDto.JobId;
+            await _employeeRepository.UpdateAsync(employee);
+
+            return Ok("Job assigned to employee successfully.");
+        }
+
+        // POST: api/Employee/assign-department
+        [HttpPost("assign-department")]
+        public async Task<IActionResult> AssignDepartment(DepartmentAssignmentDTO departmentAssignmentDto)
+        {
+            var employee = await _employeeRepository.GetByIdAsync(departmentAssignmentDto.EmployeeId);
+            if (employee == null)
+            {
+                return NotFound("Employee not found.");
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userRepository.GetByIdAsync(int.Parse(userId));
+
+            if (user == null || user.CompanyId == null || employee.CompanyId != user.CompanyId)
+            {
+                return BadRequest("User or CompanyId not found or mismatch.");
+            }
+
+            employee.DepartmentId = departmentAssignmentDto.DepartmentId;
+            await _employeeRepository.UpdateAsync(employee);
+
+            return Ok("Department assigned to employee successfully.");
+        }
+
+        // POST: api/Employee/assign-user
+        [HttpPost("assign-user")]
+        public async Task<IActionResult> AssignUser(UserAssignmentDTO userAssignmentDto)
+        {
+            var assignEmployee = await _employeeRepository.GetByIdAsync(userAssignmentDto.EmployeeId);
+            if (assignEmployee == null)
+            {
+                return NotFound("Employee not found.");
+            }
+            var assignUser = await _userRepository.GetByIdAsync(userAssignmentDto.UserId);
+            if (assignUser == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userRepository.GetByIdAsync(int.Parse(userId));
+
+            if (user == null || user.CompanyId == null || assignEmployee.CompanyId != assignUser.CompanyId)
+            {
+                return BadRequest("Not found or mismatch.");
+            }
+
+            assignEmployee.UserId = userAssignmentDto.UserId;
+            await _employeeRepository.UpdateAsync(assignEmployee);
+
+            return Ok("User assigned to employee successfully.");
         }
     }
 }
