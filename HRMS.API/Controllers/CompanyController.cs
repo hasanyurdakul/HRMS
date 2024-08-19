@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS.API;
 
-
+[Authorize(Roles = "Admin,CompanyOwner,CompanyManager")]
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
 public class CompanyController : ControllerBase
 {
     private readonly ICompanyRepository _companyRepository;

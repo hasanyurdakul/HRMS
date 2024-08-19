@@ -97,7 +97,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(
+// options =>
+// {
+//     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+//     options.AddPolicy("CompanyOwner", policy => policy.RequireRole("CompanyOwner"));
+//     options.AddPolicy("CompanyManager", policy => policy.RequireRole("CompanyManager"));
+//     options.AddPolicy("CompanyUser", policy => policy.RequireRole("CompanyUser"));
+// }
+);
 
 builder.Services.AddControllers()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SalaryDTOValidator>())
@@ -110,6 +118,21 @@ builder.Services.AddControllers()
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+// "builder.Services.ConfigureApplicationCookie(options =>
+// {
+//     options.LoginPath = "/api/Auth/login"; // Kendi rotanızı kullanın
+//     options.Events.OnRedirectToLogin = context =>
+//     {
+//         if (context.Request.Path.StartsWithSegments("/api"))
+//         {
+//             context.Response.Redirect(context.RedirectUri);
+//             return Task.CompletedTask;
+//         }
+//         context.Response.Redirect(context.RedirectUri);
+//         return Task.CompletedTask;
+//     };
+
+// });"
 
 builder.Services.AddSwaggerGen(c =>
 {

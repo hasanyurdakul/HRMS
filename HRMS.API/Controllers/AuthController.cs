@@ -28,6 +28,7 @@ namespace HRMS.API.Controllers
             _emailService = emailService;
         }
 
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
