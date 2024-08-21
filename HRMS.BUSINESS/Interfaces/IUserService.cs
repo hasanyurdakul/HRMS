@@ -11,4 +11,6 @@ public interface IUserService
     Task<User> GetRelatedUser(int employeeId);
     Task AddUserAsync(User user);
     Task<User> Authenticate(string username, string password);
+    Task<IList<User>> GetUsersByCompanyId(int companyId);
+
 }

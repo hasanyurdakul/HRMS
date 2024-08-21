@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using HRMS.CORE.DTOs;
 using HRMS.BUSINESS.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using HRMS.BUSINESS;
 
 namespace HRMS.API.Controllers
 {
-    [Authorize(Roles = "CompanyManager")]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeController : ControllerBase
@@ -20,17 +20,20 @@ namespace HRMS.API.Controllers
         private readonly IUserRepository _userRepository;
         private readonly ISalaryService _salaryService;
         private readonly AppDbContext _context;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, IUserRepository userRepository, ISalaryService salaryService, AppDbContext context)
+        public EmployeeController(IEmployeeRepository employeeRepository, IUserRepository userRepository, ISalaryService salaryService, AppDbContext context, IEmployeeService employeeService)
         {
             _employeeRepository = employeeRepository;
             _userRepository = userRepository;
             _salaryService = salaryService;
             _context = context;
+            _employeeService = employeeService;
         }
 
 
         // GET: api/Employee
+        [Authorize(Roles = "CompanyOwner,CompanyManager,CompanyUser")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetEmployeeDTO>>> GetEmployees()
         {
@@ -64,6 +67,8 @@ namespace HRMS.API.Controllers
             return Ok(getEmployeeDTOs);
         }
         // GET: api/Employee/5
+
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Employee>> GetEmployee(int id)
         {
@@ -85,6 +90,7 @@ namespace HRMS.API.Controllers
         }
 
         // POST: api/Employee
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpPost]
         public async Task<ActionResult<CreateEmployeeDTO>> PostEmployee(CreateEmployeeDTO createEmployeeDto)
         {
@@ -137,6 +143,7 @@ namespace HRMS.API.Controllers
         }
 
         // PUT: api/Employee/5
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEmployee(int id, UpdateEmployeeDTO updateEmployeeDto)
         {
@@ -192,6 +199,7 @@ namespace HRMS.API.Controllers
         }
 
         // DELETE: api/Employee/5
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
@@ -203,6 +211,7 @@ namespace HRMS.API.Controllers
         }
 
         // GET: api/Employee/5/salaries
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpGet("{id}/salaries")]
         public async Task<ActionResult<IEnumerable<SalaryDTO>>> GetSalaries(int id)
         {
@@ -213,6 +222,7 @@ namespace HRMS.API.Controllers
         }
 
         // POST: api/Employee/{id}/salaries
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpPost("{id}/salaries")]
         public async Task<ActionResult<SalaryDTO>> PostSalary(int id, SalaryDTO salaryDto)
         {
@@ -236,6 +246,7 @@ namespace HRMS.API.Controllers
         }
 
         // PUT: api/Employee/5/salaries/1
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpPut("{employeeId}/salaries")]
         public async Task<IActionResult> PutSalary(int employeeId, SalaryDTO salaryDto)
         {
@@ -253,6 +264,7 @@ namespace HRMS.API.Controllers
         }
 
         // DELETE: api/Employee/5/salaries/1
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpDelete("{employeeId}/salaries/{salaryId}")]
         public async Task<IActionResult> DeleteSalary(int employeeId, int salaryId)
         {
@@ -267,6 +279,7 @@ namespace HRMS.API.Controllers
         }
 
         // POST: api/Employee/assign-job
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpPost("assign-job")]
         public async Task<IActionResult> AssignJob(JobAssignmentDTO jobAssignmentDto)
         {
@@ -291,6 +304,7 @@ namespace HRMS.API.Controllers
         }
 
         // POST: api/Employee/assign-department
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpPost("assign-department")]
         public async Task<IActionResult> AssignDepartment(DepartmentAssignmentDTO departmentAssignmentDto)
         {
@@ -315,6 +329,7 @@ namespace HRMS.API.Controllers
         }
 
         // POST: api/Employee/assign-user
+        [Authorize(Roles = "CompanyOwner,CompanyManager")]
         [HttpPost("assign-user")]
         public async Task<IActionResult> AssignUser(UserAssignmentDTO userAssignmentDto)
         {
@@ -342,5 +357,25 @@ namespace HRMS.API.Controllers
 
             return Ok("User assigned to employee successfully.");
         }
+
+        [Authorize(Roles = "CompanyOwner,CompanyManager,CompanyUser")]
+        [HttpGet("employee-card")]
+        public async Task<ActionResult<EmployeeCardDTO>> GetEmployeeCard()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userRepository.GetByIdAsync(int.Parse(userId));
+            var employee = await _context.Employees.Where(e => e.UserId == user.Id).FirstOrDefaultAsync();
+            if (employee == null)
+            {
+                return NotFound("Employee not found.");
+            }
+            var employeeCard = await _employeeService.GetEmployeeCardAsync(employee.Id);
+
+
+            return employeeCard;
+        }
+
+
+
     }
 }

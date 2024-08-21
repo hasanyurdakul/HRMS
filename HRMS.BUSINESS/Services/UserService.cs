@@ -70,4 +70,9 @@ public class UserService : IUserService
         }
         return null;
     }
+
+    public async Task<IList<User>> GetUsersByCompanyId(int companyId)
+    {
+        return (IList<User>)await _userRepository.FindAsync(u => u.CompanyId == companyId);
+    }
 }

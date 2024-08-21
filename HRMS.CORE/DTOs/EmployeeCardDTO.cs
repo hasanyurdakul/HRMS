@@ -11,4 +11,5 @@ public class EmployeeCardDTO
     public string DepartmentName { get; set; }
     public string ManagerName { get; set; }
     public DateTime HireDate { get; set; }
+    public int GenderId { get; set; }
 }

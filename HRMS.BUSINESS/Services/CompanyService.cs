@@ -12,22 +12,25 @@ public class CompanyService : ICompanyService
     {
         _context = context;
     }
-    public async Task<List<UpcomingBirthdaysDTO>> GetUpcomingBirthdaysAsync(int companyId)
+    public async Task<List<UpcomingBirthdaysDTO>> GetUpcomingBirthdaysAsync(int? companyId)
     {
         var today = DateTime.Today;
         var employees = await _context.Employees
         .Include(e => e.Department)
-            .Where(e => e.Id == companyId)
+            .Where(e => e.CompanyId == companyId)
             .OrderBy(e => EF.Functions.DateDiffDay(today, e.BirthDate))
+            .Take(5)
             .Select(e => new UpcomingBirthdaysDTO
             {
                 EmployeeFirstName = e.FirstName,
                 EmployeeLastName = e.LastName,
-                BirthDate = e.BirthDate,
-                EmployeeImageUrl = e.ImageUrl
+                BirthDate = e.BirthDate
+
             })
             .ToListAsync();
 
         return employees;
     }
+
+
 }

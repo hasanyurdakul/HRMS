@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using HRMS.BUSINESS;
 using HRMS.CORE;
 using HRMS.CORE.DTOs;
 using HRMS.DAL;
@@ -16,12 +17,14 @@ namespace HRMS.API.Controllers
         private readonly ILeaveRepository _leaveRepository;
         private readonly IUserRepository _userRepository;
         private readonly AppDbContext _context;
+        private readonly ILeaveService _leaveService;
 
-        public LeaveController(ILeaveRepository leaveRepository, IUserRepository userRepository, AppDbContext context)
+        public LeaveController(ILeaveRepository leaveRepository, IUserRepository userRepository, AppDbContext context, ILeaveService leaveService)
         {
             _leaveRepository = leaveRepository;
             _userRepository = userRepository;
             _context = context;
+            _leaveService = leaveService;
         }
 
         // GET: api/Leave
@@ -212,7 +215,37 @@ namespace HRMS.API.Controllers
 
             await _leaveRepository.UpdateAsync(leave);
 
-            return NoContent();
+            return Ok();
         }
+
+        // GET: api/Leave/MyLeaveCard
+        [Authorize(Roles = "CompanyUser, CompanyManager, CompanyOwner")]
+        [HttpGet("MyLeaveCard")]
+        public async Task<ActionResult<LeaveCardDTO>> GetMyLeaveCard()
+        {
+            // Get the current user's ID from the claims
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Find the user in the database
+            var user = await _context.Users
+                .Include(u => u.Employee)
+                .FirstOrDefaultAsync(u => u.Id == int.Parse(userId));
+
+            if (user == null || user.Employee == null)
+            {
+                return BadRequest("User or Employee not found.");
+            }
+
+            // Use your service to get the leave card for the employee
+            var leaveCard = await _leaveService.GetLeaveCardAsync(user.Employee.Id);
+
+            if (leaveCard == null)
+            {
+                return NotFound("Leave card not found.");
+            }
+
+            return Ok(leaveCard);
+        }
+
     }
 }

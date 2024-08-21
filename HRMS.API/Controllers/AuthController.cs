@@ -90,7 +90,7 @@ namespace HRMS.API.Controllers
             };
 
             var passwordGenerator = new PasswordGenerator();
-            string randomPassword = passwordGenerator.GenerateRandomPassword(12);
+            string randomPassword = passwordGenerator.GenerateRandomPassword(10);
             Console.WriteLine("###########PASSWORD########### \n" + randomPassword);
 
 

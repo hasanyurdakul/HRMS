@@ -84,7 +84,8 @@ public class EmployeeService : IEmployeeService
             DepartmentName = employee.Department.Name,
             ManagerName = manager != null ? $"{manager.FirstName} {manager.LastName}" : null,
             HireDate = employee.HireDate,
-            ImageUrl = employee.ImageUrl
+            ImageUrl = employee.ImageUrl,
+            GenderId = employee.GenderId
         };
 
         return employeeCard;

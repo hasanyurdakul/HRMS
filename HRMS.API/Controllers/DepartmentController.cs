@@ -19,10 +19,11 @@ public class DepartmentController : ControllerBase
     private readonly IUserRepository _userRepository;
     private readonly AppDbContext _context;
 
-    public DepartmentController(IDepartmentRepository departmentRepository, IUserRepository userRepository)
+    public DepartmentController(IDepartmentRepository departmentRepository, IUserRepository userRepository, AppDbContext context)
     {
         _departmentRepository = departmentRepository;
         _userRepository = userRepository;
+        _context = context;
     }
 
     // GET: api/Department
@@ -37,7 +38,12 @@ public class DepartmentController : ControllerBase
             return BadRequest("User or CompanyId not found.");
         }
 
-        var departments = await _context.Departments.Where(d => d.CompanyId == user.CompanyId.Value).Where(d => d.isActive == true).ToListAsync();
+        var departments = await _context.Departments.Where(d => d.CompanyId == user.CompanyId).ToListAsync();
+
+        if (departments == null || !departments.Any())
+        {
+            return NotFound("No departments found for this company.");
+        }
 
         var getDepartmentDtos = departments.Select(d => new GetDepartmentDTO
         {

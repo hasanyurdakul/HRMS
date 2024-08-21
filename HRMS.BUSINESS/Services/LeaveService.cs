@@ -27,13 +27,15 @@ public class LeaveService : ILeaveService
         var leaves = await _context.Leaves
             .Where(l => l.EmployeeId == employeeId)
             .Include(l => l.LeaveType)
+            .Include(l => l.RequestStatus)
             .ToListAsync();
 
         var leaveDetails = leaves.Select(l => new LeaveDetailDTO
         {
             LeaveType = l.LeaveType.Name,
             StartDate = l.StartDate,
-            EndDate = l.EndDate
+            EndDate = l.EndDate,
+            RequestStatus = l.RequestStatus.Name
         }).ToList();
 
         var leaveCard = new LeaveCardDTO

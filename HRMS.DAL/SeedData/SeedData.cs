@@ -6,6 +6,209 @@ public static class SeedData
 {
     public static void Initialize(AppDbContext context)
     {
+        if (context.NationalHolidays.Any())
+        {
+            return;   // Already seeded
+        }
+
+        context.NationalHolidays.AddRange(
+                new NationalHoliday
+                {
+                    Name = "Yeni Yıl",
+                    StartDate = DateTime.Parse("2024-01-01 00:00:00"),
+                    EndDate = DateTime.Parse("2024-01-01 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı",
+                    StartDate = DateTime.Parse("2024-04-23 00:00:00"),
+                    EndDate = DateTime.Parse("2024-04-23 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "1 Mayıs Emek ve Dayanışma Günü",
+                    StartDate = DateTime.Parse("2024-05-01 00:00:00"),
+                    EndDate = DateTime.Parse("2024-05-01 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+                    StartDate = DateTime.Parse("2024-05-19 00:00:00"),
+                    EndDate = DateTime.Parse("2024-05-19 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Ramazan Bayramı Arifesi",
+                    StartDate = DateTime.Parse("2024-04-09 00:00:00"),
+                    EndDate = DateTime.Parse("2024-04-09 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Ramazan Bayramı 1. Gün",
+                    StartDate = DateTime.Parse("2024-04-10 00:00:00"),
+                    EndDate = DateTime.Parse("2024-04-10 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Ramazan Bayramı 2. Gün",
+                    StartDate = DateTime.Parse("2024-04-11 00:00:00"),
+                    EndDate = DateTime.Parse("2024-04-11 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Ramazan Bayramı 3. Gün",
+                    StartDate = DateTime.Parse("2024-04-12 00:00:00"),
+                    EndDate = DateTime.Parse("2024-04-12 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Kurban Bayramı Arifesi",
+                    StartDate = DateTime.Parse("2024-06-16 00:00:00"),
+                    EndDate = DateTime.Parse("2024-06-16 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Kurban Bayramı 1. Gün",
+                    StartDate = DateTime.Parse("2024-06-17 00:00:00"),
+                    EndDate = DateTime.Parse("2024-06-17 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Kurban Bayramı 2. Gün",
+                    StartDate = DateTime.Parse("2024-06-18 00:00:00"),
+                    EndDate = DateTime.Parse("2024-06-18 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Kurban Bayramı 3. Gün",
+                    StartDate = DateTime.Parse("2024-06-19 00:00:00"),
+                    EndDate = DateTime.Parse("2024-06-19 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Kurban Bayramı 4. Gün",
+                    StartDate = DateTime.Parse("2024-06-20 00:00:00"),
+                    EndDate = DateTime.Parse("2024-06-20 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "15 Temmuz Demokrasi ve Milli Birlik Günü",
+                    StartDate = DateTime.Parse("2024-07-15 00:00:00"),
+                    EndDate = DateTime.Parse("2024-07-15 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "30 Ağustos Zafer Bayramı",
+                    StartDate = DateTime.Parse("2024-08-30 00:00:00"),
+                    EndDate = DateTime.Parse("2024-08-30 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "29 Ekim Cumhuriyet Bayramı",
+                    StartDate = DateTime.Parse("2024-10-29 00:00:00"),
+                    EndDate = DateTime.Parse("2024-10-29 23:59:59")
+                },
+                new NationalHoliday
+                {
+                    Name = "Yeni Yıl",
+                    StartDate = DateTime.Parse("2025-01-01 00:00:00"),
+                    EndDate = DateTime.Parse("2025-01-01 23:59:59")
+                },
+            new NationalHoliday
+            {
+                Name = "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı",
+                StartDate = DateTime.Parse("2025-04-23 00:00:00"),
+                EndDate = DateTime.Parse("2025-04-23 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "1 Mayıs Emek ve Dayanışma Günü",
+                StartDate = DateTime.Parse("2025-05-01 00:00:00"),
+                EndDate = DateTime.Parse("2025-05-01 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+                StartDate = DateTime.Parse("2025-05-19 00:00:00"),
+                EndDate = DateTime.Parse("2025-05-19 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Ramazan Bayramı Arifesi",
+                StartDate = DateTime.Parse("2025-03-29 00:00:00"),
+                EndDate = DateTime.Parse("2025-03-29 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Ramazan Bayramı 1. Gün",
+                StartDate = DateTime.Parse("2025-03-30 00:00:00"),
+                EndDate = DateTime.Parse("2025-03-30 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Ramazan Bayramı 2. Gün",
+                StartDate = DateTime.Parse("2025-03-31 00:00:00"),
+                EndDate = DateTime.Parse("2025-03-31 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Ramazan Bayramı 3. Gün",
+                StartDate = DateTime.Parse("2025-04-01 00:00:00"),
+                EndDate = DateTime.Parse("2025-04-01 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Kurban Bayramı Arifesi",
+                StartDate = DateTime.Parse("2025-06-06 00:00:00"),
+                EndDate = DateTime.Parse("2025-06-06 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Kurban Bayramı 1. Gün",
+                StartDate = DateTime.Parse("2025-06-07 00:00:00"),
+                EndDate = DateTime.Parse("2025-06-07 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Kurban Bayramı 2. Gün",
+                StartDate = DateTime.Parse("2025-06-08 00:00:00"),
+                EndDate = DateTime.Parse("2025-06-08 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Kurban Bayramı 3. Gün",
+                StartDate = DateTime.Parse("2025-06-09 00:00:00"),
+                EndDate = DateTime.Parse("2025-06-09 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "Kurban Bayramı 4. Gün",
+                StartDate = DateTime.Parse("2025-06-10 00:00:00"),
+                EndDate = DateTime.Parse("2025-06-10 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "15 Temmuz Demokrasi ve Milli Birlik Günü",
+                StartDate = DateTime.Parse("2025-07-15 00:00:00"),
+                EndDate = DateTime.Parse("2025-07-15 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "30 Ağustos Zafer Bayramı",
+                StartDate = DateTime.Parse("2025-08-30 00:00:00"),
+                EndDate = DateTime.Parse("2025-08-30 23:59:59")
+            },
+            new NationalHoliday
+            {
+                Name = "29 Ekim Cumhuriyet Bayramı",
+                StartDate = DateTime.Parse("2025-10-29 00:00:00"),
+                EndDate = DateTime.Parse("2025-10-29 23:59:59")
+            }
+            );
+        context.SaveChanges();
+
+
+
         // Check if there are any existing records
         if (context.Employees.Any())
         {

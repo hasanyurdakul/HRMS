@@ -4,5 +4,5 @@ namespace HRMS.BUSINESS;
 
 public interface ICompanyService
 {
-    Task<List<UpcomingBirthdaysDTO>> GetUpcomingBirthdaysAsync(int companyId);
+    Task<List<UpcomingBirthdaysDTO>> GetUpcomingBirthdaysAsync(int? companyId);
 }
