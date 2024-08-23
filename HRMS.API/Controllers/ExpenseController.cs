@@ -196,7 +196,7 @@ namespace HRMS.API.Controllers
             }
 
             var expense = await _expenseRepository.GetByIdAsync(updateExpenseStatusDto.Id);
-            if (expense == null || expense.Employee.CompanyId != user.CompanyId)
+            if (expense == null)
             {
                 return NotFound();
             }
@@ -206,7 +206,7 @@ namespace HRMS.API.Controllers
 
             await _expenseRepository.UpdateAsync(expense);
 
-            return NoContent();
+            return Ok();
         }
     }
 }
